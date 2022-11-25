@@ -5,21 +5,23 @@ import yfinance as yf
 import numpy as np
 import pandas as pd
 import time
+import os
+import pathlib
 
 def place_image2():
-    jilimg = PhotoImage(file="C:\\Users\\tobzz\\Documents\\TIckfeed\\Stock11.PNG")
+    jilimg = PhotoImage(file=img_path2)
     label.img = jilimg
     label.configure(image = jilimg)
     home.after(6000, place_image3)
 
 def place_image3():
-    lilimg = PhotoImage(file="C:\\Users\\tobzz\\Documents\\TIckfeed\\Stock33.PNG")
+    lilimg = PhotoImage(file=img_file_name3)
     label.img = lilimg
     label.configure(image = lilimg)
     home.after(6000, place_image4)
 
 def place_image4():
-    nilimg = PhotoImage(file="C:\\Users\\tobzz\\Documents\\TIckfeed\\Stock22.PNG")
+    nilimg = PhotoImage(file=img_file_name4)
     label.img = nilimg
     label.configure(image = nilimg)
     home.after(6000, place_image2)
@@ -280,9 +282,25 @@ lab1.place(x=14,y=8)
 but1.place(x=1210,y=690)
 
 
-menu1 = PhotoImage(file="C:\\Users\\tobzz\\Documents\\TIckfeed\\Stock44.PNG")
+
+img_file_name = "Stock44.png"
+current_dir = pathlib.Path(__file__).parent.resolve()
+img_path = os.path.join(current_dir, img_file_name) 
+menu1 = PhotoImage(file=img_path)
 label = Label(home, image = menu1, borderwidth=2)
 label.place(x=602,y=180)
+
+img_file_name2 = "Stock11.png"
+current_dir = pathlib.Path(__file__).parent.resolve()
+img_path2 = os.path.join(current_dir, img_file_name2)
+
+img_file_name3 = "Stock33.png"
+current_dir = pathlib.Path(__file__).parent.resolve()
+img_path3 = os.path.join(current_dir, img_file_name3) 
+
+img_file_name4 = "Stock11.png"
+current_dir = pathlib.Path(__file__).parent.resolve()
+img_path4 = os.path.join(current_dir, img_file_name4) 
 
 home.after(6000, place_image2)
 home.deiconify()
@@ -309,10 +327,14 @@ def comget():
     CS = yf.Ticker("CS")
     GS = yf.Ticker("GS")
     BK = yf.Ticker("BLK")
+    MS = yf.Ticker("MS")
+    GL = yf.Ticker("GOOGL")
     c = JP.history(period="MAX")
     d = CS.history(period="MAX")
     e = GS.history(period="MAX")
     f = BK.history(period="MAX")
+    g = MS.history(period="MAX")
+    h = GL.history(period="MAX")
     high = 0
     low = 1000000000000
     choice = drops.get()
@@ -429,11 +451,65 @@ def comget():
             #shotput.place_forget()
             shotput2.place(x=800,y=300)
             func.update()
+    elif choice == "Morgan Stanley":
+        if choice2 == "MAX":
+            i = 1
+            while i <= choice3:
+                if g.iat[-i,1] > high:
+                    high = g.iat[-i,1]
+                i = i + 1
+            #high = float(high)
+            high = round(high,3)
+            high = str(high)
+            shotput.configure(text = "$" + high)
+            #shotput2.place_forget()
+            shotput.place(x=800,y=300)
+            func.update()
+        elif choice2 == "MIN":
+            i = 1
+            while i <= choice3:
+                if g.iat[-i,2] < low:
+                    low = g.iat[-i,2]
+                i = i + 1
+            #low = float(low)
+            low = round(low,3)
+            low = str(low)
+            shotput2.configure(text = "$" + low)
+            #shotput.place_forget()
+            shotput2.place(x=800,y=300)
+            func.update()
+    elif choice == "Alphabet":
+        if choice2 == "MAX":
+            i = 1
+            while i <= choice3:
+                if h.iat[-i,1] > high:
+                    high = h.iat[-i,1]
+                i = i + 1
+            #high = float(high)
+            high = round(high,3)
+            high = str(high)
+            shotput.configure(text = "$" + high)
+            #shotput2.place_forget()
+            shotput.place(x=800,y=300)
+            func.update()
+        elif choice2 == "MIN":
+            i = 1
+            while i <= choice3:
+                if h.iat[-i,2] < low:
+                    low = h.iat[-i,2]
+                i = i + 1
+            #low = float(low)
+            low = round(low,3)
+            low = str(low)
+            shotput2.configure(text = "$" + low)
+            #shotput.place_forget()
+            shotput2.place(x=800,y=300)
+            func.update()
 
 shotput = Label(func, font=("Arial Rounded MT Bold", 30), bg = "#202124", fg="#A2DCEE",width=10,)
 shotput2 = Label(func, font=("Arial Rounded MT Bold", 30), bg = "#202124", fg="#A2DCEE",width=10)
 fontify = ("HP Simplified Hans", 16)
-drops = ttk.Combobox(func, values=["Pick a Stock","Credit Suisse","JPMorgan","Goldman Sachs","Blackrock"],  font = fontify)
+drops = ttk.Combobox(func, values=["Pick a Stock","Credit Suisse","JPMorgan","Goldman Sachs","Blackrock","Alphabet","Morgan Stanley"],  font = fontify)
 drops.current(0)
 drops.place(x=320,y=150)
 func.option_add('*TCombobox*Listbox.font', fontify)
@@ -454,5 +530,4 @@ des1.place(x=100,y=150)
 des2.place(x=100,y=210)
 des3.place(x=100,y=270)
 hetter.place(x=250,y=450)
-
 
